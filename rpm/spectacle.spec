@@ -24,7 +24,7 @@ A tool for managing and creating RPM spec files
 %prep
 %setup -q -n %{name}-%{version}
 # record non-tag version in VERSION file
-echo %{version} | sed -E 's/^([[:digit:]]+(\.[[:digit:]]+)+)+.*/\1/' > VERSION
+echo %{version} | sed -r 's/^([[:digit:]]+(\.[[:digit:]]+)+)+.*/\1/' > VERSION
 
 %build
 make tmpls
