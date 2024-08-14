@@ -1,7 +1,7 @@
 Name:       spectacle
 
 Summary:    RPM Spec file generator and management tool
-Version:    0.32
+Version:    0.33
 Release:    1
 Group:      Development/Tools
 License:    GPLv2+
