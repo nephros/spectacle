@@ -393,12 +393,12 @@ $arch_line($opt, "    ", " \\")
 %qtc_make %{?_smp_mflags}
 #else
 
-make %{?_smp_mflags}
+%make_build
 #end if ## qtc
 #else if $metadata.Builder == 'perl'
 if test -f Makefile.PL; then
 %{__perl} Makefile.PL INSTALLDIRS=vendor
-make %{?_smp_mflags}
+%make_build
 else
 %{__perl} Build.PL  --installdirs vendor
 ./Build
@@ -443,8 +443,10 @@ $arch_line($opt, "    ", " \\")
 #end for
 #end if ## ConfigOptions
 
-#if $metadata.Builder == 'make' or $metadata.Builder == 'cmake'
-make %{?_smp_mflags}
+#if $metadata.Builder == 'make'
+%make_build
+#else if $metadata.Builder == 'cmake'
+%cmake_build
 #else if $metadata.Builder == 'single-make'
 make
 #else if $metadata.Builder != 'no-make' and $metadata.Builder != 'none' and $metadata.Builder != 'no-builder'
