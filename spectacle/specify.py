@@ -43,7 +43,6 @@ SERIES_PATH = 'series.conf'
 MAND_KEYS = ('Name',
              'Summary',
              'Version',
-             'Group',
              'License',
             )
 
