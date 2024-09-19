@@ -17,11 +17,11 @@ do
 	fi
 	for p in $(zypper search -r $repo devel | awk 'FS="|" {print $2}'|grep devel|sort -u)
 	do
-		info=$(zypper info --provides "$p" | grep pkgconfig | cut -d"=" -f1 | sed 's/[[:space:]]*//g' )
+		info=$(zypper info --provides "$p" | grep pkgconfig | sed "s/[[:space:]]*//g;s/=.*$//;s/\\(.*\\)/$p,\\1/")
 		if [ -z "$info" ]; then
 			printf "I: no pkgconfig file in: %s\n" "$p" >/dev/stderr
 		else
-			printf "%s,%s\n" "$p" "$info"
+			printf "%s\n" "$info"
 		fi
 	done
 done
