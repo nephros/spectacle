@@ -144,6 +144,7 @@ class SpecParser(object):
 
         self.replace_macros = replace_macros
         self.macros = []
+        self.globals = []
 
     def _switch_subpkg(self, subpkg, create=False):
 
@@ -435,6 +436,7 @@ class SpecParser(object):
         comment = re.compile('^#.*')
         directive = re.compile('^([\w()]+):[ \t]*(.*)')
         define_re = re.compile('^%(define|global)\s+(\w+)\s+(.*)')
+        global_re = re.compile('^%(global)\s+(\w+)\s+(.*)')
         header_re = re.compile('^%(' + '|'.join(HEADERS) + ')\s*(.*)')
 
         state = ST_DEFINE
@@ -449,10 +451,14 @@ class SpecParser(object):
 
                 m = define_re.match(line)
                 if m:
+                    g = global.match(line)
                     if self.replace_macros:
                         self.table[m.group(2)] = m.group(3)
                     else:
-                        self.macros.append(line)
+                        if g:
+                            self.globals.append(line)
+                        else:
+                            self.macros.append(line)
 
                     continue #short-cut
                 else:
@@ -637,6 +643,9 @@ class SpecParser(object):
                 ck_items[key] = default
 
         # check for global macros
+        if self.globals:
+            ck_items['extra']['globals'] = self.globals
+
         if self.macros:
             ck_items['extra']['macros'] = self.macros
 
