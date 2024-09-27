@@ -144,6 +144,8 @@ All available directives for spectacle are listed as the following:
 
 * BuildConflicts: **list** of **string**
 
+* Globals: **list** of **string**
+
 * Macros: **list** of **string**
 
 * Macros2: **list** of **string**
@@ -310,6 +312,14 @@ relying on the meta data from the YAML file will be changed depending on the
 values in the YAML file.
 
 The following placeholders in spec can be customized:
+
+* Private Globals, used in this package's spec
+
+    With placeholder:
+
+        # >> globals
+        # << globals
+
 
 * Private Macros, used in this package's spec
 

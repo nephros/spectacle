@@ -97,6 +97,7 @@ LIST_KEYS = ('Sources',
              'Files',
              'RunFdupes',
              'RpmLintIgnore',
+             'Globals',
              'Macros',
              'Macros2',
              )
@@ -1236,6 +1237,16 @@ PkgBR:
             # if no srcpkg with yaml.version exists in cwd, trying to download
             if 'Sources' in self.metadata:
                 self._download_sources()
+
+        if "Globals" in self.metadata:
+            macros_parsed = {}
+            for macro in self.metadata['Globals']:
+                try:
+                    macro_name, macro_value = list(map(str.strip, macro.split(';')))
+                except:
+                    logger.error('Invalid Globals entry "%s", should be "name;value"' % macro)
+                macros_parsed[macro_name] = macro_value
+            self.metadata['Globals'] = macros_parsed
 
         if "Macros" in self.metadata:
             macros_parsed = {}
