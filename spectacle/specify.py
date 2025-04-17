@@ -43,7 +43,6 @@ SERIES_PATH = 'series.conf'
 MAND_KEYS = ('Name',
              'Summary',
              'Version',
-             'Group',
              'License',
             )
 
@@ -1186,6 +1185,12 @@ PkgBR:
         except KeyError:
             logger.warning('"Release" not specified, use "1" as the default value')
             self.release = self.metadata['Release'] = '1'
+
+        try:
+            self.group = self.metadata['Group']
+        except KeyError:
+            logger.warning('"Group" not specified, using "Applications" as the default value')
+            self.group = self.metadata['Group'] = 'Applications'
 
         if not self.specfile:
             self.specfile = "%s.spec" % self.pkg
