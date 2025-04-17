@@ -485,7 +485,9 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 %qmake_install
 #else if $metadata.Builder == 'qmake5' or $metadata.Builder == 'qtc5'
 %qmake5_install
-#else if $metadata.Builder == 'make' or $metadata.Builder == 'single-make' or $metadata.Builder == 'cmake'
+#else if $metadata.Builder == 'cmake'
+%cmake_install
+#else if $metadata.Builder == 'make' or $metadata.Builder == 'single-make'
 %make_install
 #end if ## of Builder == 'make' ...
 #if "ExtraInstall" in $metadata
