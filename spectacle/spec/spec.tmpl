@@ -319,13 +319,18 @@ $str_newline.join($extra.content.macros2.main)
 #if "NoSetup" in $metadata
 # No setup
 #else if "SetupOptions" in $metadata
+#if "AutoSetup" in $metadata
+%autosetup $metadata.SetupOptions
+#else
 %setup $metadata.SetupOptions
+#end if
 #else
 %setup -q -n $metadata.SourcePrefix
 #end if
 
 #end if ## has Sources
 ## Applying patches
+#if "AutoSetup" not in $metadata
 #if "Patches" in $metadata
 #set $idx = 0
 #for $patch in $metadata.Patches
@@ -339,6 +344,7 @@ $arch_line($patch, "# ", "\n%%patch%d -p1"%$idx)
 #end if
 #set $idx = $idx + 1
 #end for ## each patch
+#end if
 #end if
 # >> setup
 #if "setup" in $extra.content and "main" in $extra.content.setup
