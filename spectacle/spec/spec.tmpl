@@ -540,6 +540,8 @@ make test
 else
 ./Build test
 fi
+#else if  $metadata.Builder == 'meson'
+%meson_test
 #else
 make check
 #end if
