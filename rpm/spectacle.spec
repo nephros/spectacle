@@ -1,7 +1,7 @@
 Name:       spectacle
 
 Summary:    RPM Spec file generator and management tool
-Version:    0.32
+Version:    0.35.1
 Release:    1
 License:    GPLv2+
 BuildArch:  noarch
@@ -22,6 +22,8 @@ A tool for managing and creating RPM spec files
 
 %prep
 %setup -q -n %{name}-%{version}
+# record non-tag version in VERSION file
+echo %{version} | sed -E 's/^([[:digit:]]+(\.[[:digit:]]+)+)+.*/\1/' > VERSION
 
 %build
 make tmpls
