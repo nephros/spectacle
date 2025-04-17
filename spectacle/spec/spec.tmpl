@@ -147,6 +147,9 @@ BuildConflicts: $bcfl
 #if "RunFdupes" in $metadata
 BuildRequires:  fdupes
 #end if
+#if $metadata.Builder == 'meson'
+BuildRequires:  meson
+#end if
 #if $metadata.Builder == 'cmake'
 BuildRequires:  cmake
 #end if
@@ -420,6 +423,8 @@ fi
 #if $Configure == 'autogen'
 %autogen $cfgstatic
 %configure $cfgstatic#slurp
+#else if $Configure == 'meson'
+%meson #slurp
 #else if $Configure == 'cmake'
 %cmake . #slurp
 #else if $Configure == 'configure'
@@ -447,6 +452,8 @@ $arch_line($opt, "    ", " \\")
 %make_build
 #else if $metadata.Builder == 'cmake'
 %cmake_build
+#else if $metadata.Builder == 'meson'
+%meson_build
 #else if $metadata.Builder == 'single-make'
 make
 #else if $metadata.Builder != 'no-make' and $metadata.Builder != 'none' and $metadata.Builder != 'no-builder'
@@ -481,6 +488,8 @@ find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
 find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null ';'
 find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 %{_fixperms} %{buildroot}/*
+#else if $metadata.Builder == 'meson'
+%meson_install
 #else if $metadata.Builder == 'qmake' or $metadata.Builder == 'qtc'
 %qmake_install
 #else if $metadata.Builder == 'qmake5' or $metadata.Builder == 'qtc5'
