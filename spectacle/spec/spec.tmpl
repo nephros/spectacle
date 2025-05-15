@@ -319,13 +319,18 @@ $str_newline.join($extra.content.macros2.main)
 #if "NoSetup" in $metadata
 # No setup
 #else if "SetupOptions" in $metadata
+#if "AutoSetup" in $metadata
+%autosetup $metadata.SetupOptions
+#else
 %setup $metadata.SetupOptions
+#end if
 #else
 %setup -q -n $metadata.SourcePrefix
 #end if
 
 #end if ## has Sources
 ## Applying patches
+#if "AutoSetup" not in $metadata
 #if "Patches" in $metadata
 #set $idx = 0
 #for $patch in $metadata.Patches
@@ -339,6 +344,7 @@ $arch_line($patch, "# ", "\n%%patch%d -p1"%$idx)
 #end if
 #set $idx = $idx + 1
 #end for ## each patch
+#end if
 #end if
 # >> setup
 #if "setup" in $extra.content and "main" in $extra.content.setup
@@ -393,12 +399,12 @@ $arch_line($opt, "    ", " \\")
 %qtc_make %{?_smp_mflags}
 #else
 
-make %{?_smp_mflags}
+%make_build
 #end if ## qtc
 #else if $metadata.Builder == 'perl'
 if test -f Makefile.PL; then
 %{__perl} Makefile.PL INSTALLDIRS=vendor
-make %{?_smp_mflags}
+%make_build
 else
 %{__perl} Build.PL  --installdirs vendor
 ./Build
@@ -443,8 +449,10 @@ $arch_line($opt, "    ", " \\")
 #end for
 #end if ## ConfigOptions
 
-#if $metadata.Builder == 'make' or $metadata.Builder == 'cmake'
-make %{?_smp_mflags}
+#if $metadata.Builder == 'make'
+%make_build
+#else if $metadata.Builder == 'cmake'
+%cmake_build
 #else if $metadata.Builder == 'single-make'
 make
 #else if $metadata.Builder != 'no-make' and $metadata.Builder != 'none' and $metadata.Builder != 'no-builder'
@@ -483,7 +491,9 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 %qmake_install
 #else if $metadata.Builder == 'qmake5' or $metadata.Builder == 'qtc5'
 %qmake5_install
-#else if $metadata.Builder == 'make' or $metadata.Builder == 'single-make' or $metadata.Builder == 'cmake'
+#else if $metadata.Builder == 'cmake'
+%cmake_install
+#else if $metadata.Builder == 'make' or $metadata.Builder == 'single-make'
 %make_install
 #end if ## of Builder == 'make' ...
 #if "ExtraInstall" in $metadata
