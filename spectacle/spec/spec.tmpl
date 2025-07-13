@@ -461,7 +461,6 @@ $str_newline.join($extra.content.build.post)
 
 ############################ installation scripts
 %install
-rm -rf %{buildroot}
 # >> install pre
 #if "install" in $extra.content and "pre" in $extra.content.install
 $str_newline.join($extra.content.install.pre)
@@ -857,7 +856,6 @@ $str_newline.join($extra.content.postun[$sp.Name])
 #else
 %files
 #end if
-%defattr(-,root,root,-)
 #if "Files" in $metadata:
 #for $f in $metadata.Files
 $arch_line($f)
@@ -885,7 +883,6 @@ $str_newline.join($extra.content.files.main)
 #else
 %files $pkg_name
 #end if
-%defattr(-,root,root,-)
 #if "Files" in $sp:
 #for $f in $sp.Files
 $arch_line($f)
