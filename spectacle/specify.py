@@ -43,14 +43,12 @@ SERIES_PATH = 'series.conf'
 MAND_KEYS = ('Name',
              'Summary',
              'Version',
-             'Group',
              'License',
             )
 
 # Mandatory keys for subpackage
 SUB_MAND_KEYS = ('Name',
                  'Summary',
-                 'Group',
                 )
 
 # boolean keys with the default 'False' value
